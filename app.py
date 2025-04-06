@@ -313,7 +313,53 @@ def del_room():
     
     return jsonify(message="room successfully deleted"),200
     
+@app.route('/admins', methods=['POST'])
+def admins():
+    print("Enter")
+    data=request.json
+    print("printdar",data)
+    username=data.get('username')
+    admin_pass=data.get('pass')
+    email=data.get('email')
+
+    cursor2 =mysql.connection.cursor()
+    cursor2.execute('select username from adminlogin where username = %s',(username,))
+    user=cursor2.fetchone()
+    cursor2.close()
+    print(user,"user is")
+    if user !=None:
+        return jsonify(message="username is already exist"),200
+    
+    cursor3=mysql.connection.cursor()
+    cursor3.execute('INSERT INTO adminlogin (username , pass , email) VALUES (%s,%s, %s)', (username,admin_pass,email))
+    mysql.connection.commit()
+    cursor3.close()
+    return jsonify(message='user created successfully'),200
 
 
+@app.route('/admin_lgn',methods=['POST'])
+def admin_lgn():
+    data=request.json
+    username=data.get('username')
+    apas=data.get('pass')
+    
+
+
+    cursor=mysql.connection.cursor()
+    cursor.execute('select username from adminlogin where username = %s',(username,))
+    user=cursor.fetchone()
+    cursor.close()
+    print(user)
+    if user is None:
+        return jsonify(message='user not exist')
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT pass FROM adminlogin WHERE username = %s', (username,))
+    passw = cursor.fetchone()
+    cursor.close()
+    print(passw[0]) 
+    if user is not None and passw[0]==apas:
+        return jsonify(message="Login successful"), 200
+    else:
+        return jsonify(message="Incorrect ID or Pass"),400
 if __name__ == '__main__':
     app.run(debug=True)
