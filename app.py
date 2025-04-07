@@ -34,6 +34,14 @@ app_config = {
 
 mysql = MySQL(app)
 
+@app.route('/testdb')
+def test_db():
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT 1")
+        return "DB Connected!"
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.route('/',methods=['GET'])
 def home():
