@@ -33,7 +33,7 @@ app_config = {
 }
 
 mysql = MySQL(app)
-
+ 
 @app.route('/testdb')
 def test_db():
     try:
