@@ -70,42 +70,46 @@ def signup():
 # User login
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.json
-    username = data.get('username')
-    reg_password = data.get('password')
-    
-    # check for  authentication
-    
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT username FROM users WHERE username = %s', (username,))
-    user = cursor.fetchone()
-    cursor.close()
-    print(user) 
-    if user is None:
-        return jsonify(message="User not found"), 200
-    
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT org_password FROM users WHERE username = %s', (username,))
-    passw = cursor.fetchone()
-    cursor.close()
-    print(passw[0]) 
-    print(reg_password)
-    
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT chk FROM users WHERE username = %s', (username,))
-    ck = cursor.fetchone()
-    cursor.close()
-    print(ck)
-    if user is not None and passw[0]==reg_password and ck[0]==0:
-        cur=mysql.connection.cursor()
-        cur.execute('update users set chk=1 where username = %s',(username,))
-        mysql.connection.commit()
-        cur.close()
-        return jsonify(message="Login successful",cc="0"), 200
-    elif user is not None and passw[0]==reg_password and ck[0]==1:
-        return jsonify(message="Login successful",cc="1"), 200
-    else:
-        return jsonify(message="Incorrect ID or Pass"),400
+    try:
+        data = request.json
+        username = data.get('username')
+        reg_password = data.get('password')
+        
+        # check for  authentication
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT username FROM users WHERE username = %s', (username,))
+        user = cursor.fetchone()
+        cursor.close()
+        print(user) 
+        if user is None:
+            return jsonify(message="User not found"), 200
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT org_password FROM users WHERE username = %s', (username,))
+        passw = cursor.fetchone()
+        cursor.close()
+        print(passw[0]) 
+        print(reg_password)
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT chk FROM users WHERE username = %s', (username,))
+        ck = cursor.fetchone()
+        cursor.close()
+        print(ck)
+        if user is not None and passw[0]==reg_password and ck[0]==0:
+            cur=mysql.connection.cursor()
+            cur.execute('update users set chk=1 where username = %s',(username,))
+            mysql.connection.commit()
+            cur.close()
+            return jsonify(message="Login successful",cc="0"), 200
+        elif user is not None and passw[0]==reg_password and ck[0]==1:
+            return jsonify(message="Login successful",cc="1"), 200
+        else:
+            return jsonify(message="Incorrect ID or Pass"),400
+    except Exception as e:
+        return jsonify(message="Failed to LOgin", error=str(e)), 500
+        
 
 #complain  email
 @app.route('/complain_box',methods=['POST'])
