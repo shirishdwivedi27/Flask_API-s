@@ -41,7 +41,7 @@ def test_db():
         cur.execute("SELECT 1")
         return "DB Connected!"
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": str(e)},400
 
 @app.route('/',methods=['GET'])
 def home():
