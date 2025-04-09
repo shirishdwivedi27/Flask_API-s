@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 import os
 
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -39,6 +44,7 @@ def test_db():
     try:
         cur = mysql.connection.cursor()
         cur.execute("SELECT 1")
+        logging.info("hello")
         print("DB")
         return "DB Connected!"
     except Exception as e:
@@ -134,8 +140,9 @@ def complain_box():
     sender_password = os.getenv('sender_p')     
     subject = "Feedback and suggestions"
     recipient_email = 'rccremp@gmail.com'
-    print("kk",sender_email)
-    print("ww",sender_password)
+    
+    logging.info("kk",sender_email)
+    logging.info("ww",sender_password)
     data_want_send=MIMEMultipart()
     data_want_send['From']=sender_email
     data_want_send['To']=recipient_email
