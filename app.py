@@ -140,7 +140,7 @@ def complain_box():
     sender_password = os.getenv('sender_p')     
     subject = "Feedback and suggestions"
     recipient_email = 'rccremp@gmail.com'
-    
+     
     logging.info("kk",sender_email)
     logging.info("ww",sender_password)
     data_want_send=MIMEMultipart()
