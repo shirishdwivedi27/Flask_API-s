@@ -159,8 +159,7 @@ Shirish dwivedi'''
                 server.close()
                 return jsonify(message="Login successful",cc="0",message1="Email has been sent to registered email"), 200
             except Exception as e:
-                pass
-                #return jsonify(message="Failed to send email. Please try again later.", error=str(e)), 500
+                return jsonify(message="Failed to send email. Please try again later.", error=str(e)), 500
             #print(recipient_email)            
             #return jsonify(message="Login successful",cc="0"), 200
         elif user is not None and passw[0]==reg_password and ck[0]==1:
