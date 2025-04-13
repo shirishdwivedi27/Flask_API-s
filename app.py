@@ -63,7 +63,7 @@ def signup():
     username = data.get('username')  #shirish
     email=data.get('email')
     password = data.get('password')
-    
+    print("SGSFS")
     hashed_password = generate_password_hash(password)
     print(email)
     #check if that user already exists or username  is already taken .............. then need to  create new user
@@ -90,14 +90,14 @@ def login():
         data = request.json
         username = data.get('username')
         reg_password = data.get('password')
-        
+        #print(username)
         # check for  authentication
         
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT username FROM users WHERE username = %s', (username,))
         user = cursor.fetchone()
         cursor.close()
-        print(user) 
+        #print(user) 
         if user is None:
             return jsonify(message="User not found"), 200
         
@@ -105,20 +105,64 @@ def login():
         cursor.execute('SELECT org_password FROM users WHERE username = %s', (username,))
         passw = cursor.fetchone()
         cursor.close()
-        print(passw[0]) 
-        print(reg_password)
         
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT email FROM users WHERE username = %s', (username,))
+        email = cursor.fetchone()
+        cursor.close()
+        
+        #print(passw[0]) 
+        #print(reg_password)
+        #print(email)
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT chk FROM users WHERE username = %s', (username,))
         ck = cursor.fetchone()
         cursor.close()
-        print(ck)
+        #print(ck)
+        #print("HUIUI")
         if user is not None and passw[0]==reg_password and ck[0]==0:
             cur=mysql.connection.cursor()
             cur.execute('update users set chk=1 where username = %s',(username,))
             mysql.connection.commit()
             cur.close()
-            return jsonify(message="Login successful",cc="0"), 200
+            #ye wala  chalana hhai naye user ke lie
+            
+            sender_email=str(os.getenv('sender_m'))
+            logging.info(sender_email) 
+             
+            sender_password=os.getenv('sender_p')     
+            logging.info(sender_password)
+            subject = "Warm Welcome from Shirish and it's team side"
+            recipient_email = email[0]
+            
+            data_want_send=MIMEMultipart()
+            data_want_send['From']=sender_email
+            data_want_send['To']=recipient_email
+            data_want_send['subject']=subject
+            body='''Hi,
+
+My name is Shirish , I am the CEO of hekratech.pvt.lim.  This is an automated email, but if you reply it will go straight to me.
+
+If you have any feedback or comments on our product I would love to hear it. If you are considering using this website, please get in touch. We would be happy to assist you.
+
+Thanks,
+Shirish dwivedi'''
+            data_want_send.attach(MIMEText(body,'plain'))
+    
+    
+            try:
+                # Connect to the SMTP server
+                server = smtplib.SMTP('smtp.gmail.com', 587) 
+                server.starttls()
+                server.login(sender_email, sender_password)
+                server.sendmail(sender_email, recipient_email, data_want_send.as_string())
+                server.close()
+                return jsonify(message="Login successful",cc="0",message1="Email has been sent to registered email"), 200
+            except Exception as e:
+                pass
+                #return jsonify(message="Failed to send email. Please try again later.", error=str(e)), 500
+            #print(recipient_email)            
+            #return jsonify(message="Login successful",cc="0"), 200
         elif user is not None and passw[0]==reg_password and ck[0]==1:
             return jsonify(message="Login successful",cc="1"), 200
         else:
