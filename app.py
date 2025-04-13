@@ -127,7 +127,7 @@ def login():
             cur.close()
             #ye wala  chalana hhai naye user ke lie
             
-            sender_email=str(os.getenv('sender_m'))
+            sender_email='pandatraja6@gmail.com'
             logging.info(sender_email) 
              
             sender_password='gvuw fxsr ufjs ompb'    
