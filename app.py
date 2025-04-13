@@ -29,6 +29,9 @@ app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT', 3306))
 
+fir_tech=os.getenv('SENDER')
+sec_tech=os.getenv('PASSWORD')
+
 # Application Configuration
 app_config = {
     'APP_URL': os.getenv('APP_URL'),
@@ -127,10 +130,10 @@ def login():
             cur.close()
             #ye wala  chalana hhai naye user ke lie
             
-            sender_email='pandatraja6@gmail.com'
+            sender_email=fir_tech
             logging.info(sender_email) 
              
-            sender_password='gvuw fxsr ufjs ompb'    
+            sender_password=sec_tech  
             logging.info(sender_password)
             subject = "Warm Welcome from Shirish and it's team side"
             recipient_email = email[0]
