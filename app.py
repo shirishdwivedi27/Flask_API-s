@@ -130,7 +130,7 @@ def login():
             sender_email=str(os.getenv('sender_m'))
             logging.info(sender_email) 
              
-            sender_password=os.getenv('sender_p')     
+            sender_password='gvuw fxsr ufjs ompb'    
             logging.info(sender_password)
             subject = "Warm Welcome from Shirish and it's team side"
             recipient_email = email[0]
