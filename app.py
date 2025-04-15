@@ -41,7 +41,14 @@ app_config = {
 }
 
 mysql = MySQL(app)
- 
+
+log_filename = "my_logs_script.log"
+logging.basicConfig(
+    filename=log_filename,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s: %(message)s",
+)
+
 @app.route('/testdb')
 def test_db():
     try:
@@ -228,7 +235,7 @@ def forget_pass():
     
     if user_curr_pass!=None:
         org_password = user_curr_pass[0]
-        
+        #hard code value work in these
         # Email sending logic
         sender_email = os.getenv('sender_m')   # Replace with your email
         sender_password = os.getenv('sender_p')    # Replace with your email password
@@ -397,7 +404,7 @@ def admins():
     cursor2.close()
     print(user,"user is")
     if user !=None:
-        return jsonify(message="username is already exist"),200
+        return jsonify(message="username is already exist"),401
     
     cursor3=mysql.connection.cursor()
     cursor3.execute('INSERT INTO adminlogin (username , pass , email) VALUES (%s,%s, %s)', (username,admin_pass,email))
@@ -412,19 +419,20 @@ def admin_lgn():
     username=data.get('username')
     apas=data.get('pass')
     
-
-
     cursor=mysql.connection.cursor()
     cursor.execute('select username from adminlogin where username = %s',(username,))
     user=cursor.fetchone()
     cursor.close()
     print(user)
+    
     if user is None:
-        return jsonify(message='user not exist')
+        return jsonify(message='user not exist'),401
+    
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT pass FROM adminlogin WHERE username = %s', (username,))
     passw = cursor.fetchone()
     cursor.close()
+    
     print(passw[0]) 
     if user is not None and passw[0]==apas:
         return jsonify(message="Login successful"), 200
