@@ -189,8 +189,8 @@ def complain_box():
     suggestion=data.get('suggestion')
     
     #details of sender and reciever  
-    sender_email=os.getenv('sender_m') 
-    sender_password=os.getenv('sender_p')     
+    sender_email= fir_tech
+    sender_password= sec_tech
     subject = "Feedback and suggestions"
     recipient_email = 'rccremp@gmail.com'
     
