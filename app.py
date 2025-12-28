@@ -63,7 +63,7 @@ def test_db():
 
 @app.route('/',methods=['GET'])
 def home():
-    data={"message":"welcome to react-world","name":"shirish"}
+    data={"message":"welcome to react-world","name":"shirishd27"}
     return jsonify(data),200
     
 # User signup
