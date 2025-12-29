@@ -55,7 +55,6 @@ def test_db():
         cur = mysql.connection.cursor()
         cur.execute("SELECT 1")
         logging.info("hello")
-        print("DB")
         return "DB Connected!"
     except Exception as e:
         return {"error": str(e)},400 
@@ -63,7 +62,7 @@ def test_db():
 
 @app.route('/',methods=['GET'])
 def home():
-    data={"message":"welcome to react-world","name":"shirishd27"}
+    data={"message":"welcome to react-world shreya","name":"shirishd27"}
     return jsonify(data),200
     
 # User signup
